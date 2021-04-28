@@ -3,7 +3,7 @@ Contributors: butterflymedia, KodieGrantham
 Tags: gravityforms, gravity, forms, form, gravityforms, repeater2, repeat, duplicate, duplication, field, fields
 Requires at least: 5.0
 Tested up to: 5.7.1
-Stable tag: trunk
+Stable tag: 2.0.1
 
 A Gravity Forms add-on that allows specified groups of fields to be repeated by the user.
 
