@@ -1,7 +1,3 @@
-# WAIT!
-**This plugin is no longer maintained and is probably broken, go use [Gravity Forms Nested Forms by Gravity Wiz](https://gravitywiz.com/documentation/gravity-forms-nested-forms/?ref=145) instead!**
-
-![](/assets/icon-256x256.png?raw=true)
 # Gravity Forms Repeater Add-On
 A Gravity Forms add-on that allows specified groups of fields to be repeated by the user.
 <https://wordpress.org/plugins/repeater2-add-on-for-gravity-forms/>
