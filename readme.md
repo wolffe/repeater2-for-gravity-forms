@@ -1,6 +1,6 @@
 # Gravity Forms Repeater Add-On
 A Gravity Forms add-on that allows specified groups of fields to be repeated by the user.
-<https://wordpress.org/plugins/repeater2-add-on-for-gravity-forms/>
+<https://getbutterfly.com/gravity-forms-repeater-plugin/>
 
 ### Supported Fields
 * Address
@@ -23,16 +23,16 @@ A Gravity Forms add-on that allows specified groups of fields to be repeated by 
 
 ### Features
 * Repeat groups of fields multiple times
-* Use multiple repeater2s on the same form
+* Use multiple repeaters on the same form
 * Use shortcodes to display data to the user
-* Use Javascript to manipulate the repeater2
+* Use Javascript to manipulate the repeater
 * Customize the add and remove button's HTML
 * Use Gravity Forms pre-populate hooks and filters like normal
 * Supports Conditional Logic!
 
 ### Issues
 * Not all fields are currently supported.
-* Ajax enabled forms are not yet supported. (Ajax will be automatically disabled on forms with repeater2s)
+* Ajax enabled forms are not yet supported. (Ajax will be automatically disabled on forms with repeaters)
 
 ### Shortcodes
 You can place shortcodes inside of input labels, input descriptions, and HTML blocks!
@@ -43,36 +43,36 @@ You can place shortcodes inside of input labels, input descriptions, and HTML bl
 
 ### CSS Classes
 You can use these CSS classes in the in the "Custom CSS Class" setting to do different things.
-* gf_repeater2_hide_add - Will hide the '+' button if placed in the repeater2 end css setting.
-* gf_repeater2_hide_remove - Will hide the '-' button if placed in the repeater2 end css setting.
+* gf_repeater2_hide_add - Will hide the '+' button if placed in the repeater end css setting.
+* gf_repeater2_hide_remove - Will hide the '-' button if placed in the repeater end css setting.
 
 ### Javascript
 ##### Functions
-You can use Javascript to manipulate the repeater2.
+You can use Javascript to manipulate the repeater.
 * formId is your form's Id number assigned by Gravity Forms.
-* repeater2Id will depened on how many repeater2s you have in your form. (The first repeater2's ID is 1, second is 2, etc.)
-* repeater2ChildId works the same way and depends on how many times the repeater2 has been repeated.
+* repeater2Id will depened on how many repeaters you have in your form. (The first repeater's ID is 1, second is 2, etc.)
+* repeater2ChildId works the same way and depends on how many times the repeater has been repeated.
 * These functions will not allow you to repeat more than the set max and unrepeat more than the set min.
 #
 ```
 gfRepeater_repeatRepeater(formId, repeater2Id);
-  Repeats the repeater2 once.
+  Repeats the repeater once.
 ```
 ```
 gfRepeater_unrepeatRepeater(formId, repeater2Id, repeater2ChildId);
-  Un-repeats the repeater2 once. repeater2ChildId is optional.
+  Un-repeats the repeater once. repeater2ChildId is optional.
 ```
 ```
 gfRepeater_repeatRepeaterTimes(formId, repeater2Id, timesX);
-  Repeats the repeater2 a number of times.
+  Repeats the repeater a number of times.
 ```
 ```
 gfRepeater_unrepeatRepeaterTimes(formId, repeater2Id, timesX);
-  UnRepeats the repeater2 a number of times.
+  UnRepeats the repeater a number of times.
 ```
 ```
 gfRepeater_setRepeater(formId, repeater2Id, timesX);
-  Repeats or unrepeats the repeater2 to get it to whatever timesX is.
+  Repeats or unrepeats the repeater to get it to whatever timesX is.
 ```
 ```
 gfRepeater_select(formId, repeater2Id, repeatId, childId, inputId);
@@ -80,39 +80,39 @@ gfRepeater_select(formId, repeater2Id, repeatId, childId, inputId);
 ```
 
 ##### Triggers
-These triggers are assigned to the form will be fired during different repeater2 related events with the repeater2Id and repeater2ChildId attached to them.
+These triggers are assigned to the form will be fired during different repeater related events with the repeater2Id and repeater2ChildId attached to them.
 ```
-gform_repeater2_before_repeat - Fires right before a repeater2 is about to be repeated.
-gform_repeater2_after_repeat - Fires right after a repeater2 has been repeated.
-gform_repeater2_before_unrepeat - Fires right before a repeater2 is about to be un-repeated.
-gform_repeater2_after_unrepeat - Fires right after a repeater2 has been un-repeated.
-gform_repeater2_init_done - Fires after the repeater2 is done setting up. Also fires on the window when all repeater2s are done setting up.
+gform_repeater2_before_repeat - Fires right before a repeater is about to be repeated.
+gform_repeater2_after_repeat - Fires right after a repeater has been repeated.
+gform_repeater2_before_unrepeat - Fires right before a repeater is about to be un-repeated.
+gform_repeater2_after_unrepeat - Fires right after a repeater has been un-repeated.
+gform_repeater2_init_done - Fires after the repeater is done setting up. Also fires on the window when all repeaters are done setting up.
 ```
 
 ##### Information
-You can access all repeater2 information using the object `gfRepeater_repeater2s`.
+You can access all repeater information using the object `gfRepeater_repeater2s`.
 ```
 gfRepeater_repeater2s
 [formId]
     [repeater2Id]
         ['data'] - Contains different data to keep track of.
-            ['repeatCount'] - The number of times the repeater2 has been repeated.
+            ['repeatCount'] - The number of times the repeater has been repeated.
             ['prevRepeatCount'] - If the form has already been submitted and failed validation, this will contain the repeatCount from before the from was submitted, otherwise it will be null.
-            ['childrenCount'] - The number of children fields that get cloned everytime the repeater2 is repeated.
+            ['childrenCount'] - The number of children fields that get cloned everytime the repeater is repeated.
             ['paremCount'] - The highest field ID that has had their prepopulate paremeter set.
-            ['tabIndex'] - The tabindex that was assigned to the repeater2 start field and will be assigned to all children.
-            ['inputData'] - Contains an array with all of the input names in the repeater2.
+            ['tabIndex'] - The tabindex that was assigned to the repeater start field and will be assigned to all children.
+            ['inputData'] - Contains an array with all of the input names in the repeater.
         ['settings'] - Contains the different settings that are set in the form editor.
-            ['start'] - The number of times the repeater2 should be repeated when the form is loaded.
-            ['min'] - The minimum number of times the repeater2 can be repeated.
-            ['max'] - The maximum number of times the repeater2 can be repeated.
+            ['start'] - The number of times the repeater should be repeated when the form is loaded.
+            ['min'] - The minimum number of times the repeater can be repeated.
+            ['max'] - The maximum number of times the repeater can be repeated.
         ['controllers'] - Contains different elements that I like to call controllers.
             ['add'] - The add button.
             ['remove'] - The remove button.
             ['data'] - The hidden element that stores data to be passed to PHP.
-            ['start'] - The start of the repeater2.
-            ['end'] - The end of the repeater2.
-        ['children'] - Contains the children fields that get cloned everytime the repeater2 is repeated.
+            ['start'] - The start of the repeater.
+            ['end'] - The end of the repeater.
+        ['children'] - Contains the children fields that get cloned everytime the repeater is repeated.
             [childId]
                 ['element'] - The field element.
                 ['id'] - The field HTML id.
@@ -131,7 +131,7 @@ gfRepeater_repeater2s
 ```
 
 ##### Usage Examples
-Repeat the repeater2 a number of times depending on the value of a drop down field:
+Repeat the repeater a number of times depending on the value of a drop down field:
 ```
 jQuery('#gform_6 #input_6_7').change(function(){
     var attendees = jQuery(this).val();
@@ -139,7 +139,7 @@ jQuery('#gform_6 #input_6_7').change(function(){
 });
 ```
 
-Change the value of a field if the repeater2 is repeated or un-repeated:
+Change the value of a field if the repeater is repeated or un-repeated:
 ```
 jQuery('#gform_9').on('gform_repeater2_after_repeat gform_repeater2_after_unrepeat', function(event, repeater2Id, repeatId){
     if (repeater2Id == 1) {
@@ -154,9 +154,9 @@ jQuery('#gform_9').on('gform_repeater2_after_repeat gform_repeater2_after_unrepe
 ### Prepopulate Fields
 You can set Parameter Names to prepopulate repeated fields like usual with the added ability to specify which repeated set will be prepopulated. For example, let's say we have set the parameter name for one of our repeated fields to "parem":
 
-`?parem=hello+world` will result in that field being set to "hello world" regardless of how many times it has been repeated.
+`?param=hello+world` will result in that field being set to "hello world" regardless of how many times it has been repeated.
 
-`?parem3=hello+world` will result in that field being set to "hello world" only when repeated a third time.
+`?param3=hello+world` will result in that field being set to "hello world" only when repeated a third time.
 
 You can use filters as well!
 
@@ -168,71 +168,46 @@ add_filter( 'gform_field_value_parem', 'your_function_name' );
 add_filter( 'gform_field_value_parem3', 'your_function_name' );
 ```
 
-Also, setting the prepopulate parameter on the repeater2 start field will override the `start` setting.
+Also, setting the prepopulate parameter on the repeater start field will override the `start` setting.
 
 
 ### Frequently Asked Questions
-##### Can I use multiple repeater2s in one form?
+##### Can I use multiple repeaters in one form?
 Yes!
 
-##### Can I nest repeater2s?
-Unfortunately nesting repeater2s is not supported at this time.
+##### Can I nest repeaters?
+Nesting repeaters is not supported.
 
 ##### Can I change the `+` and `-` buttons to text links?
 Yes! Just go to the form editor and change the `Add HTML` and `Remove HTML` settings to `<a>Your Link Text</a>` and they should appear as regular links on your form!
 
-### Development
+### Installation & Update
 
 ##### Method 1 (Automatic Updates)
-It is possible to use the development version of this plugin in your Wordpress install and keep it updated with [Andy Fragen](https://github.com/afragen)'s [GitHub Updater](https://github.com/afragen/github-updater)!
+It is possible to keep this version up to date automatically by using [Andy Fragen](https://github.com/afragen)'s [GitHub Updater](https://github.com/afragen/github-updater)!
 
 1. Download & Install [GitHub Updater](https://github.com/afragen/github-updater).
-1. Go to Settings -> GitHub Updater.
-1. Enable Branch Switching.
-1. Go to Plugins.
-1. Select "try another branch" under Gravity Forms Repeater Add-On.
-1. Select "development".
+2. Go to Settings -> GitHub Updater.
+3. Enable Branch Switching.
+4. Go to Plugins.
 
-and that's it! You will recieve the latest development versions of this plugin!
+and that's it! You will receive the latest version of this plugin!
 
 ##### Method 2 (Manual)
 
 1. Deactivate & Uninstall current version of Gravity Forms Repeater Add-On.
-1. Download the [latest development version](https://github.com/kodie/gravityforms-repeater2/archive/development.zip).
-1. Go to Plugins.
-1. Select "Add New".
-1. Select "Upload Plugin".
-1. Select "Choose File" and find the zip file that you downloaded in step 2.
-1. Select "Install Now".
+2. Download the [latest version](https://github.com/wolffe/repeater2-for-gravity-forms/releases).
+3. Go to Plugins.
+4. Select "Add New".
+5. Select "Upload Plugin".
+6. Select "Choose File" and find the zip file that you downloaded in step 2.
+7. Select "Install Now".
 
 and you're good to go!
 
-**Warning: There is a slight possibility that development versions are unstable. Use at your own risk.**
-
-### Version
-1.0.9
-
-### Changelog
-##### 1.0.9
-* Fixed bug where in some cases a PHP error would occur when attempting to automatically disable ajax on a form.
-* Fixed bug where sometimes a javascript error would occur on date fields with a calendar icon.
-* Fixed bug where removing a specific repeatId would cause some weird things to happen.
-* Fixed bug where repeater2s in a multipage form that are not on the first page would appear to have failed validation even if the form hasn't been submitted.
-* Fixed bug where repeater2s in a muttipage form that are not on the first page would forget their saved data and ignore their start setting.
-* Fixed hideButtons setting.
-* Added [gfRepeater-buttons], [gfRepeater-add], and [gfRepeater-remove] shortcodes.
-* Added custom CSS option to repeater2 start and end fields.
-* Added gf_repeater2_hide_add and gf_repeater2_hide_remove CSS classes.
-* Added gfRepeater_select javascript function.
-* Added 'gform_repeater2_init_done' trigger to window and individual forms.
-* Changed 'beforeRepeat', 'afterRepeat', 'beforeUnRepeat', and 'afterUnRepeat' triggers to 'gform_repeater2_before_repeat', 'gform_repeater2_after_repeat', 'gform_repeater2_before_unrepeat', and 'gform_repeater2_after_unrepeat'.
-* Repeated fields now respect conditional logic from outside the repeater2.
-* Applying conditional logic on a repeated section field now also applys that logic on repeated fields under that section.
-* When exporting entries, repeater2 child data is now exported in a comma-separated list.
-
 ### Requirements
-* Wordpress 3.9 or later
-* Gravity Forms 1.9 or later
+* Wordpress 5.5 or later
+* Gravity Forms 2.5 or later
 
 ### Installation
 1. Upload the `repeater2-add-on-for-gravity-forms` folder to the `/wp-content/plugins/` directory.

@@ -1,18 +1,15 @@
 <?php
 /**
  * Plugin Name: Repeater2 for Gravity Forms
- * Plugin URI: https://wordpress.org/plugins/repeater2-add-on-for-gravity-forms/
+ * Plugin URI: https://getbutterfly.com/gravity-forms-repeater-plugin/
  * Description: A Gravity Forms add-on that allows specified groups of fields to be repeated by the user.
- * Version: 2.0.1
+ * Version: 2.0.2
  * Author: Ciprian Popescu
- * Author URI: http://www.4property.com
+ * Author URI: http://getbutterfly.com/
  * GitHub Plugin URI: 4property/repeater2-for-gravity-forms
  * GitHub Branch: master
  * License: GNU General Public License v3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- *
- * Based on Kodie Grantham's work
- * @url https://github.com/kodie/gravityforms-repeater2
  */
 
 /** TODO
@@ -20,7 +17,7 @@ https://github.com/kodie/gravityforms-repeater/pull/99/commits/ee00d36ae62e790db
 https://github.com/lukecav/awesome-gravity-forms
 /**/
 
-define('GF_REPEATER_VERSION', '2.0.1');
+define('GF_REPEATER_VERSION', '2.0.2');
 define('GF_REPEATER_PATH', basename(__DIR__) . '/' . basename(__FILE__));
 
 if (class_exists('GFForms')) {
