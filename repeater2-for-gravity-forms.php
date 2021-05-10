@@ -6,7 +6,7 @@
  * Version: 2.0.2
  * Author: Ciprian Popescu
  * Author URI: http://getbutterfly.com/
- * GitHub Plugin URI: 4property/repeater2-for-gravity-forms
+ * GitHub Plugin URI: wolffe/repeater2-for-gravity-forms
  * GitHub Branch: master
  * License: GNU General Public License v3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
