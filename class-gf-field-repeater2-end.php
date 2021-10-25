@@ -19,7 +19,8 @@ class GF_Field_Repeater2_End extends GF_Field {
 
 	public function get_form_editor_field_settings() {
 		return array(
-			'css_class_setting'
+			'css_class_setting',
+			'conditional_logic_field_setting'
 		);
 	}
 
