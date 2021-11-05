@@ -1,6 +1,7 @@
 var gfRepeater_debug = false;
 var gfRepeater_repeater2s = {};
 var gfRepeater_submitted = false;
+var gfRepeater_repeater2s_is_set = false;
 
 /*
 	gfRepeater_getRepeaters()
@@ -966,12 +967,16 @@ function gfRepeater_start() {
 }
 
 // Initiation after gravity forms has rendered.
-jQuery(document).bind('gform_post_render', function(){
-	if (gfRepeater_getRepeaters()) {
-		gfRepeater_start();
-		jQuery(window).trigger('gform_repeater2_init_done');
-	} else {
-		console.log('There was an error with one of your repeater2s. This is usually caused by forgetting to include a repeater2-end field or by trying to nest repeater2s.');
+// This will fire each time a form is rendered, but we only need it the first time.
+jQuery(document).bind('gform_post_render', function() {
+	if(!gfRepeater_repeater2s_is_set) {
+		if (gfRepeater_getRepeaters()) {
+			gfRepeater_start();
+			jQuery(window).trigger('gform_repeater2_init_done');
+		} else {
+			console.log('There was an error with one of your repeater2s. This is usually caused by forgetting to include a repeater2-end field or by trying to nest repeater2s.');
+		}
+		gfRepeater_repeater2s_is_set = true;
 	}
 });
 
