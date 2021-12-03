@@ -3,7 +3,7 @@
  * Plugin Name: Repeater2 for Gravity Forms
  * Plugin URI: https://getbutterfly.com/gravity-forms-repeater-plugin/
  * Description: A Gravity Forms add-on that allows specified groups of fields to be repeated by the user.
- * Version: 2.0.4
+ * Version: 2.0.5
  * Author: Ciprian Popescu
  * Author URI: http://getbutterfly.com/
  * GitHub Plugin URI: wolffe/repeater2-for-gravity-forms
@@ -17,7 +17,7 @@ https://github.com/kodie/gravityforms-repeater/pull/99/commits/ee00d36ae62e790db
 https://github.com/lukecav/awesome-gravity-forms
 /**/
 
-define('GF_REPEATER_VERSION', '2.0.4');
+define('GF_REPEATER_VERSION', '2.0.5');
 define('GF_REPEATER_PATH', basename(__DIR__) . '/' . basename(__FILE__));
 
 if (class_exists('GFForms')) {
