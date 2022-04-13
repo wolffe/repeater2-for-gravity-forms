@@ -889,7 +889,7 @@ function gfRepeater_getInputValue(inputElement) {
 */
 function gfRepeater_setInputValue(inputElement, inputValue) {
 	if (inputElement.is(':checkbox, :radio')) {
-		if (inputValue) { inputElement.prop('checked', true) } else { inputElement.prop('checked', false) }
+		if (inputValue == 'on' || inputElement.prop('value') === inputValue) { inputElement.prop('checked', true) } else { inputElement.prop('checked', false) }
 	} else {
 		inputElement.val(inputValue);
 	}
