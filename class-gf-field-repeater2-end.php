@@ -1,97 +1,99 @@
 <?php
 class GF_Field_Repeater2_End extends GF_Field {
-	public $type = 'repeater2-end';
+    public $type = 'repeater2-end';
 
-	public static function init_admin() {
-		$admin_page = rgget('page');
+    public static function init_admin() {
+        $admin_page = rgget( 'page' );
 
-		if ($admin_page == 'gf_edit_forms' && !empty($_GET['id'])) {
-			add_action('gform_field_standard_settings' , array('GF_Field_Repeater2_End', 'gform_standard_settings'), 10, 2);
-			add_action('gform_field_appearance_settings' , array('GF_Field_Repeater2_End', 'gform_appearance_settings'), 10, 2);
-			add_action('gform_editor_js', array('GF_Field_Repeater2_End', 'gform_editor'));
-			add_filter('gform_tooltips', array('GF_Field_Repeater2_End', 'gform_tooltips'));
-		}
-	}
+        if ( $admin_page == 'gf_edit_forms' && ! empty( $_GET['id'] ) ) {
+            add_action( 'gform_field_standard_settings', array( 'GF_Field_Repeater2_End', 'gform_standard_settings' ), 10, 2 );
+            add_action( 'gform_field_appearance_settings', array( 'GF_Field_Repeater2_End', 'gform_appearance_settings' ), 10, 2 );
+            add_action( 'gform_editor_js', array( 'GF_Field_Repeater2_End', 'gform_editor' ) );
 
-	public function get_form_editor_field_title() {
-		return 'Repeater End';
-	}
+            add_filter( 'gform_tooltips', array( 'GF_Field_Repeater2_End', 'gform_tooltips' ) );
+        }
+    }
 
-	public function get_form_editor_field_settings() {
-		return array(
-			'css_class_setting',
-			'conditional_logic_field_setting'
-		);
-	}
+    public function get_form_editor_field_title() {
+        return 'Repeater End';
+    }
 
-	public static function gform_standard_settings($position, $form_id) {
-		if ($position == 1600) {
-			echo "<li class=\"repeater2_end_settings field_setting\">
-					<label for=\"field_repeater2_end_add\">Add HTML ";
+    public function get_form_editor_field_settings() {
+        return array(
+            'css_class_setting',
+            'conditional_logic_field_setting',
+        );
+    }
 
-			gform_tooltip('form_field_repeater2_end_add');
+    public static function gform_standard_settings( $position, $form_id ) {
+        if ( (int) $position === 1600 ) {
+            echo '<li class="repeater2_end_settings field_setting">
+                <label for="field_repeater2_end_add">Add HTML ';
 
-			echo "	</label>
-					<input type=\"text\" id=\"field_repeater2_end_add\" class=\"fieldwidth-3\" size=\"35\" onchange=\"SetFieldProperty('add', this.value);\">
-				</li>";
+                gform_tooltip( 'form_field_repeater2_end_add' );
 
-			echo "<li class=\"repeater2_end_settings field_setting\">
-					<label for=\"field_repeater2_end_remove\">Remove HTML ";
+                echo '</label>
+                <input type="text" id="field_repeater2_end_add" class="fieldwidth-3" size="35" onchange="SetFieldProperty(\'add\', this.value);">
+            </li>';
 
-			gform_tooltip('form_field_repeater2_end_remove');
+            echo '<li class="repeater2_end_settings field_setting">
+                <label for="field_repeater2_end_remove">Remove HTML ';
 
-			echo "	</label>
-					<input type=\"text\" id=\"field_repeater2_end_remove\" class=\"fieldwidth-3\" size=\"35\" onchange=\"SetFieldProperty('remove', this.value);\">
-				</li>";
-		}
-	}
+                gform_tooltip( 'form_field_repeater2_end_remove' );
 
-	public static function gform_appearance_settings($position, $form_id) {
-		if ($position == 400) {
-			echo "<li class=\"repeater2_end_settings field_setting\">
-					<input type=\"checkbox\" id=\"field_repeater2_end_hideButtons\" onchange=\"SetFieldProperty('hideButtons', this.checked);\"> 
-					<label for=\"field_repeater2_end_hideButtons\" class=\"inline\">Hide Add & Remove buttons ";
+                echo '</label>
+                <input type="text" id="field_repeater2_end_remove" class="fieldwidth-3" size="35" onchange="SetFieldProperty(\'remove\', this.value);">
+            </li>';
+        }
+    }
 
-			gform_tooltip('form_field_repeater2_end_hideButtons');
+    public static function gform_appearance_settings( $position, $form_id ) {
+        if ( (int) $position === 400 ) {
+            echo '<li class="repeater2_end_settings field_setting">
+                <input type="checkbox" id="field_repeater2_end_hideButtons" onchange="SetFieldProperty(\'hideButtons\', this.checked);">
+                <label for="field_repeater2_end_hideButtons" class="inline">Hide Add & Remove buttons ';
 
-			echo "	</label>
-				</li>";
-		}
-	}
+                gform_tooltip( 'form_field_repeater2_end_hideButtons' );
 
-	public static function gform_editor() {
-		echo "<script type=\"text/javascript\">
-				fieldSettings['repeater2-end'] += ', .repeater2_end_settings';
-				jQuery(document).bind('gform_load_field_settings', function(event, field, form){
-					jQuery('#field_repeater2_end_add').val(field['add']);
-					jQuery('#field_repeater2_end_remove').val(field['remove']);
-					jQuery('#field_repeater2_end_hideButtons').prop('checked', field['hideButtons']);
-				});
-			</script>";
-	}
+                echo '</label>
+            </li>';
+        }
+    }
 
-	public static function gform_tooltips($tooltips) {
-		$tooltips['form_field_repeater2_end_add'] = "The HTML to replace the default add button. This HTML will be placed inside of a span tag with the class 'gf_repeater2_add'.";
-		$tooltips['form_field_repeater2_end_remove'] = "The HTML to replace the default remove button. This HTML will be placed inside of a span tag with the class 'gf_repeater2_remove'.";
-		$tooltips['form_field_repeater2_end_hideButtons'] = "If enabled, no add and remove buttons will be displayed. This is useful if you plan on using custom javascript to trigger the repeater2.";
-		return $tooltips;
-	}
+    public static function gform_editor() {
+        echo "<script>
+		fieldSettings['repeater2-end'] += ', .repeater2_end_settings';
+		jQuery(document).bind('gform_load_field_settings', function(event, field, form){
+			jQuery('#field_repeater2_end_add').val(field['add']);
+			jQuery('#field_repeater2_end_remove').val(field['remove']);
+			jQuery('#field_repeater2_end_hideButtons').prop('checked', field['hideButtons']);
+		});
+		</script>";
+    }
 
-	public function get_field_content($value, $force_frontend_label, $form) {
-		if (is_admin()) {
+    public static function gform_tooltips( $tooltips ) {
+        $tooltips['form_field_repeater2_end_add']         = "The HTML to replace the default add button. This HTML will be placed inside of a span tag with the class 'gf_repeater2_add'.";
+        $tooltips['form_field_repeater2_end_remove']      = "The HTML to replace the default remove button. This HTML will be placed inside of a span tag with the class 'gf_repeater2_remove'.";
+        $tooltips['form_field_repeater2_end_hideButtons'] = "If enabled, no add and remove buttons will be displayed. This is useful if you plan on using custom javascript to trigger the repeater2.";
+
+        return $tooltips;
+    }
+
+    public function get_field_content( $value, $force_frontend_label, $form ) {
+        if (is_admin()) {
 			$admin_buttons	= $this->get_admin_buttons();
 
 			$field_content = "{$admin_buttons}
-							<div class=\"gf-pagebreak-end gf-pagebreak-container gf-repeater2-end\">
-								<div class=\"gf-pagebreak-text-before\">end repeater2</div>
-								<div class=\"gf-pagebreak-text-main\"><span>REPEATER</span></div>
-								<div class=\"gf-pagebreak-text-after\">end of repeater2</div>
-							</div>";
+				<div class=\"gf-pagebreak-end gf-pagebreak-container gf-repeater2-end\">
+					<div class=\"gf-pagebreak-text-before\">End Repeater</div>
+					<div class=\"gf-pagebreak-text-main\"><span>REPEATER</span></div>
+					<div class=\"gf-pagebreak-text-after\">End of Repeater</div>
+				</div>";
 		} else {
-			$add_html		= $this->add;
-			$remove_html	= $this->remove;
-			$hideButtons	= $this->hideButtons;
-			$tabindex		= GFCommon::get_tabindex();
+			$add_html    = $this->add;
+			$remove_html = $this->remove;
+			$hideButtons = $this->hideButtons;
+			$tabindex    = GFCommon::get_tabindex();
 
 			if (empty($add_html)) { $add_html = "<img class=\"gf_repeater2_add_default\" alt=\"+\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\">"; }
 			if (empty($remove_html)) { $remove_html = "<img class=\"gf_repeater2_remove_default\" alt=\"-\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\">"; }

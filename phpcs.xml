@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Coding Standards">
+    <description>WordPress Coding Standards ruleset</description>
+
+    <file>.</file>
+
+    <!-- Exclude paths -->
+    <exclude-pattern>*.js</exclude-pattern>
+
+    <!-- Show progress, show the error codes for each message (source) -->
+    <arg value="ps" />
+
+    <!-- Check up to 8 files simultaneously -->
+    <arg name="parallel" value="8" />
+
+    <!-- Include the WordPress-Core standard -->
+    <rule ref="WordPress-Core">
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent" />
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
+        <exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
+        <exclude name="WordPress.PHP.DisallowShortTernary.Found" />
+        <exclude name="WordPress.PHP.YodaConditions" />
+    </rule>
+
+    <rule ref="Internal.NoCodeFound">
+        <severity>0</severity>
+    </rule>
+
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="indent" value="4" />
+            <property name="tabIndent" value="false" />
+        </properties>
+    </rule>
+    <rule ref="Generic.WhiteSpace.DisallowTabIndent" />
+</ruleset>

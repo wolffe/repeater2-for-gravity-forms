@@ -1,44 +1,45 @@
 <?php
 class GF_Field_Repeater2 extends GF_Field {
-	public $type = 'repeater2';
+    public $type = 'repeater2';
 
-	public static function init_admin() {
-		$admin_page = rgget('page');
+    public static function init_admin() {
+        $admin_page = rgget( 'page' );
 
-		if ($admin_page == 'gf_edit_forms' && !empty($_GET['id'])) {
-			add_action('gform_field_standard_settings' , array('GF_Field_Repeater2', 'gform_standard_settings'), 10, 2);
-			add_action('gform_field_appearance_settings' , array('GF_Field_Repeater2', 'gform_appearance_settings'), 10, 2);
-			add_action('gform_editor_js_set_default_values', array('GF_Field_Repeater2', 'gform_set_defaults'));
-			add_action('gform_editor_js', array('GF_Field_Repeater2', 'gform_editor'));
-			add_filter('gform_tooltips', array('GF_Field_Repeater2', 'gform_tooltips'));
-		}
+        if ( $admin_page == 'gf_edit_forms' && ! empty( $_GET['id'] ) ) {
+            add_action( 'gform_field_standard_settings' , array( 'GF_Field_Repeater2', 'gform_standard_settings' ), 10, 2 );
+            add_action( 'gform_field_appearance_settings' , array( 'GF_Field_Repeater2', 'gform_appearance_settings' ), 10, 2 );
+            add_action( 'gform_editor_js_set_default_values', array( 'GF_Field_Repeater2', 'gform_set_defaults' ) );
+            add_action( 'gform_editor_js', array( 'GF_Field_Repeater2', 'gform_editor' ) );
+            add_filter( 'gform_tooltips', array( 'GF_Field_Repeater2', 'gform_tooltips' ) );
+        }
 
-		if ($admin_page == 'gf_entries') {
-			add_filter('gform_form_post_get_meta', array('GF_Field_Repeater2', 'gform_hide_children'));
-		}
-	}
+        if ( $admin_page == 'gf_entries' ) {
+            add_filter( 'gform_form_post_get_meta', array( 'GF_Field_Repeater2', 'gform_hide_children' ) );
+        }
+    }
 
-	public static function init_frontend() {
-		add_action('gform_form_args', array('GF_Field_Repeater2', 'gform_disable_ajax'));
-		add_action('gform_enqueue_scripts', array('GF_Field_Repeater2', 'gform_enqueue_scripts'), 10, 2);
-		add_filter('gform_pre_render', array('GF_Field_Repeater2', 'gform_unhide_children_validation'));
-		add_filter('gform_pre_validation', array('GF_Field_Repeater2', 'gform_bypass_children_validation'));
-	}
+    public static function init_frontend() {
+        add_action( 'gform_form_args', array( 'GF_Field_Repeater2', 'gform_disable_ajax' ) );
+        add_action( 'gform_enqueue_scripts', array( 'GF_Field_Repeater2', 'gform_enqueue_scripts' ), 10, 2 );
+        add_filter( 'gform_pre_render', array( 'GF_Field_Repeater2', 'gform_unhide_children_validation' ) );
+        add_filter( 'gform_pre_validation', array( 'GF_Field_Repeater2', 'gform_bypass_children_validation' ) );
+    }
 
-	public static function gform_enqueue_scripts($form, $is_ajax) {
-		if (!empty($form)) {
-			if (GF_Field_Repeater2::get_field_index($form) !== false) {
-				wp_enqueue_script('gforms_repeater2_postcapture_js', plugins_url('js/jquery.postcapture.min.js', __FILE__), array('jquery'), '0.0.1');
-				wp_enqueue_script('jquery_mask', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js', array('jquery'), GF_REPEATER_VERSION);
-				wp_enqueue_script('gforms_repeater2_js', plugins_url('js/gf-repeater2.js', __FILE__), array('jquery', 'jquery_mask'), GF_REPEATER_VERSION);
-				wp_enqueue_style('gforms_repeater2_css', plugins_url('css/gf-repeater2.css', __FILE__), array(), GF_REPEATER_VERSION);
-			}
-		}
-	}
+    public static function gform_enqueue_scripts( $form, $is_ajax ) {
+        if ( ! empty( $form ) ) {
+            if ( GF_Field_Repeater2::get_field_index( $form ) !== false ) {
+                wp_enqueue_script( 'gforms_repeater2_postcapture_js', plugins_url( 'js/jquery.postcapture.min.js', __FILE__ ), array( 'jquery' ), '0.0.1' );
+                wp_enqueue_script( 'jquery_mask', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js', array( 'jquery' ), '1.14.16' );
+                wp_enqueue_script( 'gforms_repeater2_js', plugins_url( 'js/gf-repeater2.js', __FILE__ ), array( 'jquery', 'jquery_mask' ), GF_REPEATER_VERSION );
 
-	public function get_form_editor_field_title() {
-		return 'Repeater';
-	}
+                wp_enqueue_style( 'gforms_repeater2_css', plugins_url( 'css/gf-repeater2.css', __FILE__ ), array(), GF_REPEATER_VERSION );
+            }
+        }
+    }
+
+    public function get_form_editor_field_title() {
+        return 'Repeater';
+    }
 
 	public function get_form_editor_field_settings() {
 		return array(
@@ -48,7 +49,7 @@ class GF_Field_Repeater2 extends GF_Field {
 			'error_message_setting',
 			'label_setting',
 			'prepopulate_field_setting',
-			'conditional_logic_field_setting'
+			'conditional_logic_field_setting',
 		);
 	}
 
@@ -207,15 +208,15 @@ class GF_Field_Repeater2 extends GF_Field {
 		}
 	}
 
-	public function get_field_content($value, $force_frontend_label, $form) {
-		if (is_admin()) {
+	public function get_field_content( $value, $force_frontend_label, $form ) {
+		if ( is_admin() ) {
 			$admin_buttons = $this->get_admin_buttons();
 			$field_content = "{$admin_buttons}
-							<div class=\"gf-pagebreak-first gf-pagebreak-container gf-repeater2 gf-repeater2-start\">
-								<div class=\"gf-pagebreak-text-before\">begin repeater2</div>
-								<div class=\"gf-pagebreak-text-main\"><span>REPEATER</span></div>
-								<div class=\"gf-pagebreak-text-after\">top of repeater2</div>
-							</div>";
+				<div class=\"gf-pagebreak-first gf-pagebreak-container gf-repeater2 gf-repeater2-start\">
+					<div class=\"gf-pagebreak-text-before\">Begin Repeater</div>
+					<div class=\"gf-pagebreak-text-main\"><span>REPEATER</span></div>
+					<div class=\"gf-pagebreak-text-after\">Top of Repeater</div>
+				</div>";
 		} else {
 			$field_label		= $this->get_field_label($force_frontend_label, $value);
 			$description		= $this->get_description($this->description, 'gsection_description gf_repeater2_description');
@@ -347,7 +348,6 @@ class GF_Field_Repeater2 extends GF_Field {
 			}
 			$value[$i] = $childValue;
 		}
-
 		return maybe_serialize($value);
 	}
 
