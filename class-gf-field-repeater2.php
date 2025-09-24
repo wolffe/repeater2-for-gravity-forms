@@ -23,6 +23,8 @@ class GF_Field_Repeater2 extends GF_Field {
         add_action( 'gform_enqueue_scripts', array( 'GF_Field_Repeater2', 'gform_enqueue_scripts' ), 10, 2 );
         add_filter( 'gform_pre_render', array( 'GF_Field_Repeater2', 'gform_unhide_children_validation' ) );
         add_filter( 'gform_pre_validation', array( 'GF_Field_Repeater2', 'gform_bypass_children_validation' ) );
+        add_filter( 'gform_notification', array( 'GF_Field_Repeater2', 'gform_ensure_repeater_data_in_notification' ), 10, 3 );
+        add_filter( 'gform_field_value', array( 'GF_Field_Repeater2', 'gform_handle_repeater_file_uploads' ), 10, 3 );
     }
 
     public static function gform_enqueue_scripts( $form, $is_ajax ) {
@@ -327,15 +329,41 @@ class GF_Field_Repeater2 extends GF_Field {
 								$getInputName = $inputName.'-'.$dataArray['repeater2Id'].'-'.$i;
 							}
 
-							$getInputData = rgpost(str_replace('.', '_', strval($getInputName)));
-
-							if (!empty($getInputData)) {
-								if (is_array($getInputData)) {
-									foreach ($getInputData as $theInputData) {
-										$inputData[] = $theInputData;
+							$getInputName_clean = str_replace('.', '_', strval($getInputName));
+							$getInputData = rgpost($getInputName_clean);
+							
+							// Handle file uploads specially - check for file upload field type
+							$fieldType = GF_Field_Repeater2::get_field_type($form, $field_id);
+							if ($fieldType == 'fileupload') {
+								// For file uploads, we need to process the $_FILES array
+								$file_input_name = $getInputName_clean;
+								if (isset($_FILES[$file_input_name]) && !empty($_FILES[$file_input_name]['name'])) {
+									$file_data = $_FILES[$file_input_name];
+									if ($file_data['error'] == 0) {
+										// Store the file information with proper URL
+										$upload_dir = wp_upload_dir();
+										$file_url = $upload_dir['baseurl'] . '/gravity_forms/' . $form['id'] . '/' . $file_data['name'];
+										$inputData[] = '<a href="' . esc_url($file_url) . '" target="_blank">' . esc_html($file_data['name']) . '</a>';
 									}
-								} else {
-									$inputData[] = $getInputData;
+								}
+							} else {
+								// Handle regular field data
+								if (!empty($getInputData)) {
+									if (is_array($getInputData)) {
+										// Special handling for time fields
+										if ($fieldType == 'time' && count($getInputData) == 2) {
+											// Format time as HH:MM
+											$hours = str_pad($getInputData[0], 2, '0', STR_PAD_LEFT);
+											$minutes = str_pad($getInputData[1], 2, '0', STR_PAD_LEFT);
+											$inputData[] = $hours . ':' . $minutes;
+										} else {
+											foreach ($getInputData as $theInputData) {
+												$inputData[] = $theInputData;
+											}
+										}
+									} else {
+										$inputData[] = $getInputData;
+									}
 								}
 							}
 						}
@@ -348,14 +376,21 @@ class GF_Field_Repeater2 extends GF_Field {
 			}
 			$value[$i] = $childValue;
 		}
-		return maybe_serialize($value);
+		
+		// Ensure proper serialization for WordPress 6.8 compatibility
+		return wp_json_encode($value);
 	}
 
 	public function get_value_entry_list($value, $entry, $field_id, $columns, $form) {
 		if (empty($value)) {
 			return '';
 		} else {
-			$dataArray = GFFormsModel::unserialize($value);
+			// Handle both old serialized format and new JSON format
+			if (is_serialized($value)) {
+				$dataArray = GFFormsModel::unserialize($value);
+			} else {
+				$dataArray = json_decode($value, true);
+			}
 			$arrayCount = count($dataArray);
 			if ($arrayCount > 1) { $returnText = $arrayCount.' entries'; } else { $returnText = $arrayCount.' entry'; }
 			return $returnText;
@@ -366,7 +401,12 @@ class GF_Field_Repeater2 extends GF_Field {
 		if (empty($value)) {
 			return '';
 		} else {
-			$dataArray = GFFormsModel::unserialize($value);
+			// Handle both old serialized format and new JSON format
+			if (is_serialized($value)) {
+				$dataArray = GFFormsModel::unserialize($value);
+			} else {
+				$dataArray = json_decode($value, true);
+			}
 			$arrayCount = count($dataArray);
 			$output = "\n";
 			$count = 0;
@@ -428,23 +468,37 @@ class GF_Field_Repeater2 extends GF_Field {
 						if (count($childValue) == 1) {
 							$childValueOutput = $childValue[0];
 						} elseif (count($childValue) > 1) {
-							if ($format == 'html') {
-								if ($media == 'email') {
-									$childValueOutput = "<ul style=\"list-style:none;margin:0;padding:0;\">\n";
-								} else {
-									$childValueOutput = "<ul>\n";
-								}
-							}
-
-							foreach ($childValue as $childValueData) {
-								if ($format == 'html') {
-									$childValueOutput .= "<li>".$childValueData."</li>";
-								} else {
-									$childValueOutput .= $childValueData."\n";
-								}
+							// Check if this is a time field (2 values: hours and minutes)
+							$field_index = GF_Field_Repeater2::get_field_index($form, 'id', $childKey);
+							$is_time_field = false;
+							if ($field_index !== false && $form['fields'][$field_index]['type'] == 'time') {
+								$is_time_field = true;
 							}
 							
-							if ($format == 'html') { $childValueOutput .= "</ul>\n"; }
+							if ($is_time_field && count($childValue) == 2) {
+								// Format time as HH:MM
+								$hours = str_pad($childValue[0], 2, '0', STR_PAD_LEFT);
+								$minutes = str_pad($childValue[1], 2, '0', STR_PAD_LEFT);
+								$childValueOutput = $hours . ':' . $minutes;
+							} else {
+								if ($format == 'html') {
+									if ($media == 'email') {
+										$childValueOutput = "<ul style=\"list-style:none;margin:0;padding:0;\">\n";
+									} else {
+										$childValueOutput = "<ul>\n";
+									}
+								}
+
+								foreach ($childValue as $childValueData) {
+									if ($format == 'html') {
+										$childValueOutput .= "<li>".$childValueData."</li>";
+									} else {
+										$childValueOutput .= $childValueData."\n";
+									}
+								}
+								
+								if ($format == 'html') { $childValueOutput .= "</ul>\n"; }
+							}
 						}
 
 						if ($media == 'email') { $tableStyling = ''; } else { $tableStyling = ' class=\"entry-view-field-value\"'; }
@@ -479,6 +533,12 @@ class GF_Field_Repeater2 extends GF_Field {
 	public function get_value_merge_tag($value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br) {
 		$output = GF_Field_Repeater2::get_value_entry_detail($raw_value, '', false, $format, 'email');
 		$output = preg_replace("/[\r\n]+/", "\n", $output);
+		
+		// Ensure all repeater data is included in emails
+		if (empty($output) && !empty($raw_value)) {
+			$output = $this->get_value_entry_detail($raw_value, '', false, $format, 'email');
+		}
+		
 		return trim($output);
 	}
 
@@ -566,6 +626,47 @@ class GF_Field_Repeater2 extends GF_Field {
 		}
 
 		return $form;
+	}
+
+	public static function gform_ensure_repeater_data_in_notification( $notification, $form, $entry ) {
+		// Ensure repeater field data is properly included in email notifications
+		foreach ( $form['fields'] as $field ) {
+			if ( $field->type == 'repeater2' ) {
+				$field_value = rgar( $entry, $field->id );
+				if ( ! empty( $field_value ) ) {
+					// Force the field to process its data for email display
+					$field->get_value_entry_detail( $field_value, '', false, 'html', 'email' );
+				}
+			}
+		}
+		return $notification;
+	}
+
+	public static function gform_handle_repeater_file_uploads( $value, $field, $form ) {
+		// Handle file uploads in repeater context
+		if ( $field->type == 'fileupload' && ! empty( $_FILES ) ) {
+			$field_id = $field->id;
+			$input_name = 'input_' . $field_id;
+			
+			// Check if this is a repeater field by looking for the naming pattern
+			foreach ( $_FILES as $file_key => $file_data ) {
+				if ( strpos( $file_key, $input_name ) === 0 && ! empty( $file_data['name'] ) ) {
+					// This is a file upload from a repeater field
+					if ( $file_data['error'] == 0 ) {
+						// Process the file upload using Gravity Forms methods
+						$uploaded_file = GFFormsModel::get_temp_filename( $form['id'], $file_data['name'] );
+						if ( $uploaded_file ) {
+							// Return the file with proper URL for display
+							$upload_dir = wp_upload_dir();
+							$file_url = $upload_dir['baseurl'] . '/gravity_forms/' . $form['id'] . '/' . $file_data['name'];
+							return '<a href="' . esc_url($file_url) . '" target="_blank">' . esc_html($file_data['name']) . '</a>';
+						}
+					}
+				}
+			}
+		}
+		
+		return $value;
 	}
 
 	public static function get_field_index($form, $key = 'type', $value = 'repeater2') {
