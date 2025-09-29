@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Repeater2 for Gravity Forms
+ * Plugin Name: Repeater for Gravity Forms
  * Plugin URI: https://getbutterfly.com/gravity-forms-repeater-plugin/
  * Description: A Gravity Forms add-on that allows specified groups of fields to be repeated by the user.
  * Version: 2.1.6

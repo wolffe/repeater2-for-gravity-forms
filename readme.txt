@@ -1,4 +1,4 @@
-=== Repeater2 for Gravity Forms ===
+=== Repeater for Gravity Forms ===
 Contributors: butterflymedia
 Tags: gravityforms, gravity, forms, form, gravityforms, repeater, repeater2, repeat, duplicate, duplication, field, fields
 Requires at least: 5.5
